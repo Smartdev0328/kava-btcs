@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime/debug"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authante "github.com/cosmos/cosmos-sdk/x/auth/ante"
@@ -30,6 +31,7 @@ type HandlerOptions struct {
 	MaxTxGasWanted         uint64
 	AddressFetchers        []AddressFetcher
 	ExtensionOptionChecker authante.ExtensionOptionChecker
+	Cdc                    codec.BinaryCodec
 	TxFeeChecker           authante.TxFeeChecker
 }
 
@@ -143,6 +145,7 @@ func newCosmosAnteHandler(options cosmosHandlerOptions) sdk.AnteHandler {
 			sdk.MsgTypeURL(&evmtypes.MsgEthereumTx{}),
 			sdk.MsgTypeURL(&vesting.MsgCreateVestingAccount{}),
 		),
+		NewMinCommissionDecorator(options.Cdc),
 		authante.NewValidateBasicDecorator(),
 		authante.NewTxTimeoutHeightDecorator(),
 		// If ethermint x/feemarket is enabled, align Cosmos min fee with the EVM
