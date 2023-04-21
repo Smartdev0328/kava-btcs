@@ -31,7 +31,7 @@ For detailed instructions see [the Kava docs](https://docs.kava.io/docs/particip
 
 ```bash
 git checkout v0.21.0
-make install
+make install 
 ```
 
 End-to-end tests of Kava use a tool for generating networks with different configurations: [kvtool](https://github.com/Kava-Labs/kvtool).
